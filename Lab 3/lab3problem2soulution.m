@@ -29,7 +29,7 @@ grid on;
 k=1:2:2*N_harmonics-1; %Odd harmonics (1,3,5,...,19)
 A=1./(pi*k); % Amplitudes
 figure(2);
-stem(k*f0,A,'Marker','none');
+stem(k*f0,A,'marker','none');
 xlabel('Frequency [Hz]');
 ylabel('Amplitude A_k');
 title('Line Spectrum');

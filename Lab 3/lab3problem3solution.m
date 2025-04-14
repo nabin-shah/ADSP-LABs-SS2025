@@ -1,0 +1,35 @@
+fs=44100; %Sampling rate 
+t=0:1/fs:2; % Time vector for 2 seconds 
+f0=200;
+N_harmonics=10; % Number of odd harmonics 
+
+%Initialize the compopund signal 
+compound_signal= zeros(size(t));
+
+%Generate and odd cosine harmonics 
+for k=1:2:2*N_harmonics-1
+    harmonic= (1/(pi*k)^2)* cos(2*pi*k*f0*t);
+    compound_signal=compound_signal+harmonic;
+end
+%Play the sound
+%sound(compound_signal,fs);
+
+%Plot three periods
+figure(1)
+n=1:round(3*fs/f0);
+plot(t(n),compound_signal(n));
+xlabel('Time [s]');
+ylabel('Amplitude');
+title('Sinusoids');
+grid on;
+
+%plot Line Spectrum 
+
+k=1:2:2*N_harmonics-1;
+A=1 ./(pi*k).^2;
+figure(2);
+stem(k*f0,A,'marker','none');
+xlabel('Frequency [Hz]');
+ylabel('Amplitude A_k');
+title('Line Spectrum');
+grid on;
