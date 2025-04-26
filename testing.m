@@ -1,43 +1,55 @@
-% Original parameters
-f0 = 200;                   % Signal frequency (Hz)
-Ts_ref = 0.001;             % Reference sampling period (1 ms)
-duration = 100;             % Extended duration (seconds) to capture more samples
-t_ref = 0:Ts_ref:duration;  % Extended time vector for reference signal
-x_ref = cos(2*pi*f0*t_ref); % Reference signal
+% Parameters
+f0 = 200;             % base frequency in Hz
+K = 3;                % number of periods to plot
+Ts_ref = 0.001;       % reference Ts = 1ms
+period = 1/f0;        % one period of cosine
+min_samples = 10;     % minimum number of samples to show for each Ts_test
 
-% Test sampling periods
-% Ts_test = [0.003, 0.004, 0.005, 10.001]; 
-Ts_test = [0.006, 0.007, 0.008, 0.099]; % 6ms, 7ms, 8ms, 99ms
+% Sampling periods to test
+% Ts_values = [0.006, 0.007, 0.008, 0.099]; % 6ms, 7ms, 8ms, 99ms
+Ts_values = [0.009, 0.010, 0.011, 1]; 
+% Ts_values = [0.003, 0.004, 0.005, 10.001];
+% Ts_values = [0.003, 0.004, 0.005,0.006, 0.007, 0.008, 0.099, 10.001];
 
-% Plot reference signal (first 100 samples)
 figure;
-subplot(length(Ts_test)+1, 1, 1);
-n_ref = 0:100; % Plot first 100 samples
-stem(n_ref, x_ref(1:length(n_ref))); grid on;
-title('Reference: T_s = 1 ms');
-xlabel('n'), ylabel('x_{ref}[n]');
+sgtitle('Stem Plots: Reference (Ts=1ms) vs Test Ts');
 
-% Check each test Ts
-for i = 1:length(Ts_test)
-    Ts = Ts_test(i);
-    t = 0:Ts:duration;      % Extended time vector for test signal
-    x = cos(2*pi*f0*t);     % Sampled signal
+for i = 1:length(Ts_values)
+    Ts_test = Ts_values(i);
     
-    % Compute normalized frequency
-    f_norm = f0 * Ts; 
-    f_norm_mod = mod(f_norm, 1); % Modulo 1
+    % Calculate total time: either 3 periods or enough for min_samples
+    T_total = max(K * period, Ts_test * min_samples);
+
+    % Generate signals
+    t_ref = 0:Ts_ref:T_total;
+    x_ref = cos(2*pi*f0*t_ref);
+    N_ref = length(x_ref);
+
+    t_test = 0:Ts_test:T_total;
+    x_test = cos(2*pi*f0*t_test);
+    N_test = length(x_test);
+
+    % Compare signals
+    N_common = min(N_ref, N_test);
+    is_same = isequal(round(x_ref(1:N_common), 10), round(x_test(1:N_common), 10));
     
-    % Check if indistinguishable
-    if abs(f_norm_mod - 0.2) < 1e-6 || abs(f_norm_mod - 0.8) < 1e-6
-        result = 'INDISTINGUISHABLE';
+    % Print result
+    if is_same
+        disp(['✅ Ts = ', num2str(Ts_test*1000), ' ms: Indistinguishable']);
     else
-        result = 'Distinguishable';
+        disp(['❌ Ts = ', num2str(Ts_test*1000), ' ms: Distinguishable']);
     end
     
-    % Plot first 100 samples (or all if fewer)
-    subplot(length(Ts_test)+1, 1, i+1);
-    n = 0:min(100, length(x)-1); 
-    stem(n, x(1:length(n))), grid on;
-    title(sprintf('T_s = %.3f s: %s (f_{norm} = %.2f)', Ts, result, f_norm_mod));
-    xlabel('n'), ylabel('x[n]');
+    % Plot reference and test signals
+    subplot(length(Ts_values), 2, 2*i-1);
+    stem(0:N_common-1, x_ref(1:N_common), 'filled');
+    xlabel('n'), ylabel('x_{ref}[n]');
+    title('Reference Ts=1ms');
+    grid on;
+
+    subplot(length(Ts_values), 2, 2*i);
+    stem(0:N_common-1, x_test(1:N_common), 'filled');
+    xlabel('n'), ylabel('x_{test}[n]');
+    title(['Test Ts=', num2str(Ts_test*1000), ' ms']);
+    grid on;
 end
