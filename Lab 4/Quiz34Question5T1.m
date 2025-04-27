@@ -1,6 +1,8 @@
 % Define the continuous-time signal x(t) as an anonymous function
 % x(t) = cos(200*pi*t) + (1/2)*sin(400*pi*t) + (1/3)*cos(600*pi*t) + (1/4)*sin(800*pi*t) + (1/5)*cos(1000*pi*t)
 xt = @(t) cos(200*pi*t) + (1/2)*sin(400*pi*t) + (1/3)*cos(600*pi*t) + (1/4)*sin(800*pi*t) + (1/5)*cos(1000*pi*t);
+% % testing another signal
+% xt = @(t) sin(200*pi*t) + (1/4)*cos(400*pi*t) + (1/9)*sin(600*pi*t) + (1/16)*cos(800*pi*t) + (1/25)*sin(1000*pi*t);
 
 % Define the time range for plotting (matching the example)
 t_end = 0.03; % seconds
@@ -17,6 +19,7 @@ ylim([-2, 2]); % Set y-axis limits similar to the example
 
 % --- Define the sampling frequencies to test ---
 fs_values = [500, 400, 300, 100]; % Hz
+% fs_values = [200, 400, 300, 100]; % Hz
 
 % --- Loop through each sampling frequency ---
 for i = 1:length(fs_values)
