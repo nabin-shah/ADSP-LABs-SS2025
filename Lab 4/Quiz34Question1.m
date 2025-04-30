@@ -7,8 +7,8 @@ min_samples = 10;     % minimum number of samples to show for each Ts_test
 
 % Sampling periods to test
 % Ts_values = [0.006, 0.007, 0.008, 0.099]; % 6ms, 7ms, 8ms, 99ms
-% Ts_values = [0.009, 0.010, 0.011, 1]; 
-Ts_values = [0.003, 0.004, 0.005, 10.001];
+Ts_values = [0.009, 0.010, 0.011, 1]; 
+% Ts_values = [0.003, 0.004, 0.005, 10.001];
 % Ts_values = [0.003, 0.004, 0.005,0.006, 0.007, 0.008, 0.099, 10.001];
 
 figure;

@@ -13,3 +13,4 @@ D = 1;
 
 sys = ss(A,B,C,D);
 bode(sys);
+grid on;
