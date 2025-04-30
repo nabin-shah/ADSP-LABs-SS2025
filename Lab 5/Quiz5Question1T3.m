@@ -1,7 +1,7 @@
 % Circuit parameters
 R = 100;
-L = 10e-6;     % 10 microHenries
-C = 0.01e-6;  % 0.01 microFarads
+L = 1e-3;     % 10 microHenries
+C = 0.1e-6;  % 0.01 microFarads
 
 % Define the transfer function for Vout = VL + VC in a series RLC
 num = [L*C, 0, 1];
@@ -33,7 +33,7 @@ grid on;
 %------------------------------------------------------
 
 % Frequency of interest (f0*10)
-f_test2 = f0*10;
+f_test2 = f0*5;
 t2 = [0:0.01/f_test2:10/f_test2]; 
 
 % Sinusoidal input at f_test
@@ -44,7 +44,7 @@ y_test2 = lsim(sys, x_test2, t2);
 figure;
 plot(t2, x_test2, t2, y_test2);
 % title(['Response at f0*10 = ', num2str(f_test/1e3), ' kHz']);
-title(['Response at f0*10']);
+title(['Response at 5*f0']);
 xlabel('Time (s)');
 ylabel('Voltage (V)');
 legend('Input (Vin)', 'Output (Vout)');
@@ -52,7 +52,7 @@ grid on;
 %---------------------------------------------------------
 
 % Frequency of interest (f0/10)
-f_test3 = f0/10;
+f_test3 = f0/5;
 t3 = [0:0.01/f_test3:10/f_test3]; 
 
 % Sinusoidal input at f_test
@@ -63,7 +63,7 @@ y_test3 = lsim(sys, x_test3, t3);
 figure;
 plot(t3, x_test3, t3, y_test3);
 % title(['Response at f0/10 = ', num2str(f_test/1e3), ' kHz']);
-title(['Response at f0/10']);
+title(['Response at f0/5']);
 xlabel('Time (s)');
 ylabel('Voltage (V)');
 legend('Input (Vin)', 'Output (Vout)');
