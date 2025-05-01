@@ -1,23 +1,37 @@
-fs = 90/2;           % Sampling frequency in Hz (since ωs = 90π, fs = 90π/(2π) = 45 Hz)
-Ts = 1/fs;           % Sampling period
-n = 0:20;            % Sample indices (you can choose more samples if you like)
+% Define component values
+L = 0.001;    % Inductance in Henry (1 mH)
+C = 1e-8;     % Capacitance in Farad (0.01 µF)
+Rs = 68;      % Series resistance in Ohms (68 Ω as per Graph B)
 
-f1 = 30/(2);         % f1 = 30π/(2π) = 15 Hz
-f2 = 60/(2);         % f2 = 60π/(2π) = 30 Hz
-f3 = 90/(2);         % f3 = 90π/(2π) = 45 Hz
+% Define the transfer function for v_L / V_in
+s = tf('s');
+H = (L * s) / (Rs * L * C * s^2 + L * s + Rs);  % Transfer function with R = ∞
 
-x1 = cos(2*pi*f1*n*Ts); % x1[n]
-x2 = cos(2*pi*f2*n*Ts); % x2[n]
-x3 = cos(2*pi*f3*n*Ts); % x3[n]
+% Generate frequency vector using logspace
+freq_rad = logspace(4, 7, 1000);  % From 10^4 to 10^7 rad/s, 1000 points
 
+% Compute frequency response
+[mag, phase] = bode(H, freq_rad);
+
+% Convert to dB and degrees
+mag_dB = squeeze(mag);         % Magnitude in linear scale
+phase_deg = squeeze(phase);    % Phase in degrees
+
+% Plot magnitude response
 figure;
-subplot(3,1,1); stem(n, x1); title('x1[n]');
+subplot(2,1,1);
+semilogx(freq_rad, 20*log10(mag_dB), 'LineWidth', 1.5);
+ylim([-20, 0]);  % Match y-axis limits: -20 dB to 0 dB
 grid on;
-subplot(3,1,2); stem(n, x2); title('x2[n]');
-grid on;
-subplot(3,1,3); stem(n, x3); title('x3[n]');
-grid on;
+title('Frequency Response (Graph B) - Magnitude');
+xlabel('Frequency [rad/s]');
+ylabel('Magnitude Response [dB]');
 
-isequal(x1, x2)  % Should return true
-isequal(x1, x3)  % Should return false
-isequal(x2, x3)  % Should return false
+% Plot phase response
+subplot(2,1,2);
+semilogx(freq_rad, phase_deg, 'LineWidth', 1.5);
+ylim([-80, 60]);  % Match y-axis limits: -80° to 60°
+grid on;
+title('Frequency Response (Graph B) - Phase');
+xlabel('Frequency [rad/s]');
+ylabel('Phase Response [deg]');

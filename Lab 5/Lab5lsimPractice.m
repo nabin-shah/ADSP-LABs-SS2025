@@ -18,6 +18,7 @@ f0 = 1/(2*pi*sqrt(L*C));  % resonant frequency
 t = [0:0.01/f0:10/f0];    % time array
 x = sin(2*pi*(f0)*t);       % sinusoid input
 lsim(sys, x, t);         % plot system response for input x
+legend( 'Output (Vout)','Input');
 grid on;
 
 %lsim - Calculates and plots the system's response to the input signal x.
