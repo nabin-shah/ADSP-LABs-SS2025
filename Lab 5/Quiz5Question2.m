@@ -14,6 +14,9 @@ sys = tf(num, den);
 f0 = 1/(2*pi*sqrt(L*C));
 disp(['Resonant Frequency (f0): ', num2str(f0/1e3), ' kHz']);
 %------------------------------------------------------
+
+
+
 % Frequency of interest (f0)
 f_test = f0;
 t = [0:0.01/f_test:10/f_test]; 
@@ -30,7 +33,9 @@ ylabel('y1');
 grid on;
 %------------------------------------------------------
 
-%2. Frequency of interest (f0*10)
+
+
+%2. Frequency of interest (f0*100)
 f_test2 = f0*100;
 t2 = [0:0.01/f_test2:10/f_test2]; 
 
@@ -46,7 +51,9 @@ ylabel('y1');
 grid on;
 %---------------------------------------------------------
 
-%3. Frequency of interest (f0/10)
+
+
+%3. Frequency of interest (f0/100)
 f_test3 = f0/100;
 t3 = [0:0.01/f_test3:10/f_test3]; 
 

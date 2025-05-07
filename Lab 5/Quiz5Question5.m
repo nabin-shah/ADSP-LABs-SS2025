@@ -3,10 +3,11 @@
 L = 1e-3;      % Henry
 C = 0.01e-6;      % Farad
 
-Rs= 68;  %Test for different values.
+Rs= 47;  %Test for different values.
 
 num = [L, 0];
-den = [L*C* Rs, L, Rs];
+den = [L*C*Rs, L, Rs];
+
 
 %Transfer function model;
 sys=tf(num,den);

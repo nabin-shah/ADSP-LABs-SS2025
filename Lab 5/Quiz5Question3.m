@@ -14,7 +14,8 @@ sys1 = tf(num1, den);
 figure;
 bode(sys1);
 title('Frequency Response, while output across V_R')
-grid on;
+% grid on;
+grid minor;
 %---------------------------------------------------
 
 
@@ -27,7 +28,8 @@ sys2 = tf(num2, den);
 figure;
 bode(sys2);
 title('Frequency Response, while output across V_L')
-grid on;
+% grid on;
+grid minor;
 %---------------------------------------------------
 
 
@@ -40,7 +42,8 @@ sys3 = tf(num3, den);
 figure;
 bode(sys3);
 title('Frequency Response, while output across V_C')
-grid on;
+% grid on;
+grid minor;
 %---------------------------------------------------
 
 
@@ -53,7 +56,8 @@ sys4 = tf(num4, den);
 figure;
 bode(sys4);
 title('Frequency Response, while output across V_L + V_C')
-grid on;
+% grid on;
+grid minor;
 %---------------------------------------------------
 
 
@@ -66,5 +70,6 @@ sys5 = tf(num5, den);
 figure;
 bode(sys5);
 title('Frequency Response, while output across V_C + V_R')
-grid on;
+% grid on;
+grid minor;
 %---------------------------------------------------

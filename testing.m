@@ -1,64 +1,82 @@
-% Define the component values
-L = 1e-3; % 1 mH
-C = 1e-8; % 0.01 uF
-R_values = [10, 47, 68]; % Test values for Rs
-R = inf; % R is infinite
+% Circuit parameters
+R = 100;
+L = 1e-3;     % 10 microHenries
+C = 0.01e-6;  % 0.01 microFarads
 
-% Define the frequency range for the analysis
-f_start = 1e2; % Start frequency: 100 Hz
-f_end = 1e8;   % End frequency: 100 MHz
-num_points = 10000; % Number of points
-frequencies = logspace(log10(f_start), log10(f_end), num_points); % Logarithmic spacing
-omega = 2 * pi * frequencies; % Convert frequency to radians/second
+% % Define the transfer function for Vout = VL + VC in a series RLC
+% num = [1];
+% den = [L*C, R*C, 1];
+% Define the transfer function for Vout = V_C + V_R in a series RLC
+num = [R*C,1];
+den = [L*C, R*C, 1];
 
-% Initialize figure
-figure;
+% Transfer function model
+sys = tf(num, den);
 
-% Initialize arrays to store plot handles
-h_mag = zeros(1, length(R_values));
-h_phase = zeros(1, length(R_values));
+% Resonant frequency
+f0 = 1/(2*pi*sqrt(L*C));
+disp(['Resonant Frequency (f0): ', num2str(f0/1e3), ' kHz']);
 
-% Loop through each Rs value
-for i = 1:length(R_values)
-    Rs = R_values(i);
 
-    % Calculate the transfer function H(s) for the current Rs
-    s = 1j * omega; % Laplace variable
-    H = (s*L) ./ (L*C*Rs.*s.^2 + (L + (L*Rs)/R).*s + Rs);
 
-    % Calculate the magnitude and phase of the transfer function
-    magnitude_dB = 20 * log10(abs(H));
-    phase_deg = rad2deg(angle(H));
 
-    % Plot the frequency response
-    subplot(2, 1, 1); % Magnitude plot
-    h_mag(i) = semilogx(omega, magnitude_dB); % Store the plot handle
-    hold on;
-    title('Magnitude Response');
-    xlabel('Frequency [rad/s]');
-    ylabel('Magnitude [dB]');
-    grid on;
-    xlim([1e2, 1e8]);
 
-    subplot(2, 1, 2); % Phase plot
-    h_phase(i) = semilogx(omega, phase_deg); % Store the plot handle
-    hold on;
-    title('Phase Response');
-    xlabel('Frequency [rad/s]');
-    ylabel('Phase [deg]');
-    grid on;
-    xlim([1e2, 1e8]);
-end
+%------------------------------------------------------
+% Frequency of interest (f0)
+f_test = f0;
+t = [0:0.01/f_test:10/f_test]; 
 
-% Add legend, now using the stored handles
-subplot(2, 1, 1);
-legend(h_mag, ['Rs = ' num2str(R_values(1)) ' Ohm', ...
-                 'Rs = ' num2str(R_values(2)) ' Ohm', ...
-                 'Rs = ' num2str(R_values(3)) ' Ohm']);
-hold off;
+figure(1)
+% Sinusoidal input at f_test
+x_test = sin(2*pi*f_test*t);
+lsim(sys, x_test, t);
 
-subplot(2, 1, 2);
-legend(h_phase, ['Rs = ' num2str(R_values(1)) ' Ohm', ...
-                   'Rs = ' num2str(R_values(2)) ' Ohm', ...
-                   'Rs = ' num2str(R_values(3)) ' Ohm']);
-hold off;
+title(['Response at f_0']);
+xlabel('Time (s)');
+ylabel('y1');
+% legend('Input (Vin)', 'Output (Vout)');
+grid on;
+%------------------------------------------------------
+
+
+
+
+
+
+%2. Frequency of interest (f0*100)
+f_test2 = f0*100;
+t2 = [0:0.01/f_test2:10/f_test2]; 
+
+% Sinusoidal input at f_test
+x_test2 = sin(2*pi*f_test2*t2);
+
+ figure(2);
+lsim(sys, x_test2, t2);
+title(['Response at 100*f_0']);
+xlabel('Time (s)');
+ylabel('y1');
+% legend('Input (Vin)', 'Output (Vout)');
+grid on;
+%---------------------------------------------------------
+
+
+
+
+
+
+%3. Frequency of interest (f0/100)
+f_test3 = f0/100;
+t3 = [0:0.01/f_test3:10/f_test3]; 
+
+% Sinusoidal input at f_test
+x_test3 = sin(2*pi*f_test3*t3);
+
+figure(3);
+lsim(sys, x_test3, t3);
+title(['Response at f_0/100']);
+xlabel('Time (s)');
+ylabel('y1');
+% legend('Input (Vin)', 'Output (Vout)');
+grid on;
+
+%--------------------------------------------------------
