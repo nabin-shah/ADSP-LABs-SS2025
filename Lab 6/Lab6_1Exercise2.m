@@ -21,6 +21,3 @@ for k=1:length(f0)
     legend;
     grid on;
 end
-
-
-

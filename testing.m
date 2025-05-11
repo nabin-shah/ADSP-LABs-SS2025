@@ -1,82 +1,33 @@
-% Circuit parameters
-R = 100;
-L = 1e-3;     % 10 microHenries
-C = 0.01e-6;  % 0.01 microFarads
+% RC filter parameters
+R = 2.2e3;         % Resistance in Ohms
+C = 0.047e-6;      % Capacitance in Farads
 
-% % Define the transfer function for Vout = VL + VC in a series RLC
-% num = [1];
-% den = [L*C, R*C, 1];
-% Define the transfer function for Vout = V_C + V_R in a series RLC
-num = [R*C,1];
-den = [L*C, R*C, 1];
+% Define the transfer function
+s = tf('s');
+H = (R*C*s) / (1 + R*C*s);
 
-% Transfer function model
-sys = tf(num, den);
+% Frequencies to test (Hz)
+freqs = [1e3, 10e3, 100e3];
 
-% Resonant frequency
-f0 = 1/(2*pi*sqrt(L*C));
-disp(['Resonant Frequency (f0): ', num2str(f0/1e3), ' kHz']);
+% Time settings for clear visualization (at least several periods)
+periods = 5;   % Number of periods to simulate for each freq
 
+for i = 1:length(freqs)
+    f = freqs(i);
+    T = 1/f;                 % Period
+    t = 0:1e-6:periods*T;    % Time vector (1 us steps)
+    vin = sin(2*pi*f*t);     % Input sine wave
 
+    % Simulate filter output
+    vout = lsim(H, vin, t);
 
-
-
-%------------------------------------------------------
-% Frequency of interest (f0)
-f_test = f0;
-t = [0:0.01/f_test:10/f_test]; 
-
-figure(1)
-% Sinusoidal input at f_test
-x_test = sin(2*pi*f_test*t);
-lsim(sys, x_test, t);
-
-title(['Response at f_0']);
-xlabel('Time (s)');
-ylabel('y1');
-% legend('Input (Vin)', 'Output (Vout)');
-grid on;
-%------------------------------------------------------
-
-
-
-
-
-
-%2. Frequency of interest (f0*100)
-f_test2 = f0*100;
-t2 = [0:0.01/f_test2:10/f_test2]; 
-
-% Sinusoidal input at f_test
-x_test2 = sin(2*pi*f_test2*t2);
-
- figure(2);
-lsim(sys, x_test2, t2);
-title(['Response at 100*f_0']);
-xlabel('Time (s)');
-ylabel('y1');
-% legend('Input (Vin)', 'Output (Vout)');
-grid on;
-%---------------------------------------------------------
-
-
-
-
-
-
-%3. Frequency of interest (f0/100)
-f_test3 = f0/100;
-t3 = [0:0.01/f_test3:10/f_test3]; 
-
-% Sinusoidal input at f_test
-x_test3 = sin(2*pi*f_test3*t3);
-
-figure(3);
-lsim(sys, x_test3, t3);
-title(['Response at f_0/100']);
-xlabel('Time (s)');
-ylabel('y1');
-% legend('Input (Vin)', 'Output (Vout)');
-grid on;
-
-%--------------------------------------------------------
+    % Plot input and output
+    figure;
+    plot(t*1e3, vin, '--', 'LineWidth', 1.5); hold on;
+    plot(t*1e3, vout, 'LineWidth', 1.5);
+    xlabel('Time (ms)');
+    ylabel('Voltage (V)');
+    title(sprintf('RC High-Pass Filter: Input vs Output at %.0f Hz', f));
+    legend('Input (Vin)', 'Output (Vout)');
+    grid on;
+end
