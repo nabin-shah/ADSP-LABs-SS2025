@@ -1,33 +1,27 @@
-% RC filter parameters
-R = 2.2e3;         % Resistance in Ohms
-C = 0.047e-6;      % Capacitance in Farads
+%Test whichever option fits
 
-% Define the transfer function
-s = tf('s');
-H = (R*C*s) / (1 + R*C*s);
+% R1= 1e3; C1= 0.001e-6; 
+R= 1e3; C= 0.047e-6; 
+% R3= 2.2e3; C3= 0.001e-6; 
+% R4= 2.2e3; C4= 0.047e-6; 
+L=1e-3;
 
-% Frequencies to test (Hz)
-freqs = [1e3, 10e3, 100e3];
 
-% Time settings for clear visualization (at least several periods)
-periods = 5;   % Number of periods to simulate for each freq
 
-for i = 1:length(freqs)
-    f = freqs(i);
-    T = 1/f;                 % Period
-    t = 0:1e-6:periods*T;    % Time vector (1 us steps)
-    vin = sin(2*pi*f*t);     % Input sine wave
+%Interested output at Capacitor V_R
 
-    % Simulate filter output
-    vout = lsim(H, vin, t);
+%-------------------------------------------------------
 
-    % Plot input and output
-    figure;
-    plot(t*1e3, vin, '--', 'LineWidth', 1.5); hold on;
-    plot(t*1e3, vout, 'LineWidth', 1.5);
-    xlabel('Time (ms)');
-    ylabel('Voltage (V)');
-    title(sprintf('RC High-Pass Filter: Input vs Output at %.0f Hz', f));
-    legend('Input (Vin)', 'Output (Vout)');
-    grid on;
-end
+
+% 1 Define Transfer Function  ;
+% num1=[L,R];
+num1=[L,0,0];
+den=[R*L*C,L,R];
+% num1=[R*L*C,0,0];
+% den=[R*L*C,L,R];
+
+sys1=tf(num1,den);
+figure;
+bode(sys1);
+title(['Output at V__CL']);
+grid minor;
