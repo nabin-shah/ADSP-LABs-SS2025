@@ -1,27 +1,14 @@
-%Test whichever option fits
+% 2. in a 2-stage RC ladder if R_1=R_2 and C_1=C_2 
+R1=1e3; C1=0.01e-6;  % R_a=1e3; C_a=0.01e-6;
+R2=10e3; C2=0.001e-6;  % R_b=10e3; C_b=0.001e-6;
 
-% R1= 1e3; C1= 0.001e-6; 
-R= 1e3; C= 0.047e-6; 
-% R3= 2.2e3; C3= 0.001e-6; 
-% R4= 2.2e3; C4= 0.047e-6; 
-L=1e-3;
+num=[1];
+den3=[R1*R1*C1*C1, 3*R1*C1, 1];
+den4=[R2*R2*C2*C2, 3*R2*C2, 1];
 
-
-
-%Interested output at Capacitor V_R
-
-%-------------------------------------------------------
-
-
-% 1 Define Transfer Function  ;
-% num1=[L,R];
-num1=[L,0,0];
-den=[R*L*C,L,R];
-% num1=[R*L*C,0,0];
-% den=[R*L*C,L,R];
-
-sys1=tf(num1,den);
+sys3=tf(num,den3);
+sys4=tf(num,den4);
 figure;
-bode(sys1);
-title(['Output at V__CL']);
+bode(sys3,sys4);
+legend('R_1 = R_2 =R_a, C_1 =C_2=C_a sys','R_1 = R_2 =R_b, C_1 =C_2=C_b sys' );
 grid minor;
