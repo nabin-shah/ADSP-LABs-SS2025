@@ -1,18 +1,31 @@
-% 4. in a 2-stage RC ladder if R_1=R_2 and C_1=C_2 
-% R1=1e3; C1=0.01e-6;  % R_a=1e3; C_a=0.01e-6;
-% R2=10e3; C2=0.001e-6;  % R_b=10e3; C_b=0.001e-6;
-R_a=1e3; C_a=0.01e-6;
-R_b=10e3; C_b=0.001e-6;
+R=100;
+C=0.01e-6;
+
+% one stage 
 num=[1];
-den5=[R_a*R_b*C_a*C_b, (R_a*C_a+R_a*C_b+R_b*C_b), 1];
+den=[R*C,1];
+sys=tf(num,den);
 
-den6=[R_b*R_a*C_b*C_a, (R_b*C_b+R_b*C_a+R_a*C_a), 1];
-
-
-
-sys5=tf(num,den5);
-sys6=tf(num,den6);
+%for 2 stages
+sys2=sys*sys;
 figure;
-bode(sys5,sys6);
-legend('diff-sys5','diff-sys6' );
+bode(sys2);
 grid minor;
+legend('2-stages')
+
+
+
+% for 3 stages 
+sys3=sys*sys*sys;
+figure;
+bode(sys3);
+grid minor;
+legend('3-stages')
+
+
+% for 4 stages
+sys4=sys*sys*sys*sys;
+figure;
+bode(sys4);
+grid minor;
+legend('4-stages')
