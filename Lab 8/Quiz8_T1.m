@@ -1,5 +1,5 @@
-num= [-10e-5,1];
-den= [10e-5,1];
+num= [-4.7e-6,1];
+den= [4.7e-6,1];
 
 sys=tf(num,den);
 bode(sys);
