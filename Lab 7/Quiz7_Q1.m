@@ -3,7 +3,7 @@ C=0.01e-6;
 
 % one stage 
 num=[1];
-den=[R*C,1];
+den=[R*C,1]; 
 sys=tf(num,den);
 
 %for 2 stages
